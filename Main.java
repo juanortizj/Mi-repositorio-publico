@@ -1,110 +1,117 @@
 import java.util.Scanner;
 
-class Casilleros {
+class Paquete {
+    private String tipo;
+    private String fecha;
 
-    private String[] puestos = new String[16];
-    private int[] tiempos = new int[16];
-    private Scanner scanner = new Scanner(System.in);
+    public Paquete(String tipo, String fecha) {
+        this.tipo = tipo;
+        this.fecha = fecha;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String toString() {
+        return tipo + " | Fecha: " + fecha;
+    }
+}
+
+class Casilleros {
+    private Paquete[] casilleros = new Paquete[16];
+    private Scanner sc = new Scanner(System.in);
 
     public void menu() {
         int opcion;
 
         do {
-            System.out.println("\nRegistrador Paquetes");
+            System.out.println("\n-- Menú Principal Casillero --");
             System.out.println("1. Registrar paquete");
-            System.out.println("2. Consultar Casilleros disponibles");
-            System.out.println("3. Información de casillero");
+            System.out.println("2. Ver casilleros disponibles");
+            System.out.println("3. Consultar casillero");
             System.out.println("4. Salir");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine();
+            opcion = sc.nextInt();
+            sc.nextLine();
 
             switch (opcion) {
-                case 1:
-                    registrarPaquetes();
-                    break;
-                case 2:
-                    mostrarPuestosDisponibles();
-                    break;
-                case 3:
-                    informacionCasillero();
-                    break;
-                case 4:
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opción no válida, intente de nuevo.");
-                    break;
+                case 1 -> registrarPaquete();
+                case 2 -> mostrarDisponibles();
+                case 3 -> infoCasillero();
+                case 4 -> System.out.println("Muchas gracias por utilizar nuestro software, esperamos que vuelva pronto.");
+                default -> System.out.println("Opción incorrecta, vuelva a intentar. ");
             }
         } while (opcion != 4);
     }
 
-    private void registrarPaquetes() {
-        System.out.println("\n--Registrar paquetes--");
-        mostrarPuestosDisponibles();
-        System.out.println(
-            "Ingrese el puesto (0 - 15) en el cual quiere colocar su paquete,\n" +
-            "los primeros 4 casilleros son para paquetería grande (42 × 35 × 32 cm),\n" +
-            "los siguientes 4 casilleros son para la paquetería mediana (40,6 × 30,5 × 35,6 cm),\n" +
-            "y los 8 casilleros restantes son para la paquetería pequeña (20 × 15 × 10 cm).\n"
-        );
-        int puesto = scanner.nextInt();
-        scanner.nextLine();
+    private void registrarPaquete() {
+        System.out.println("\n--- Registrar paquete ---");
+        mostrarDisponibles();
 
-        if (puesto < 0 || puesto >= 16) {
-            System.out.println("Puesto inválido.");
+        System.out.print("Ingrese número de casillero (0-15): ");
+        int pos = sc.nextInt();
+        sc.nextLine();
+
+        if (pos < 0 || pos >= 16) {
+            System.out.println("Este casillero no existe.");
             return;
         }
 
-        if (puestos[puesto] != null) {
-            System.out.println(" Ese puesto ya está ocupado.");
+        if (casilleros[pos] != null) {
+            System.out.println("Este casillero ya está ocupado. ");
             return;
         }
 
-        System.out.print("Ingrese el tipo de paquete (Grande/Mediano/Pequeño): ");
-        String tamanio = scanner.nextLine();
+        System.out.print("Tipo de paquete (Grande/Mediano/Pequeño): ");
+        String tipo = sc.nextLine();
 
+        System.out.print("Fecha (dd/mm/aaaa): ");
+        String fecha = sc.nextLine();
 
-        System.out.print("Ingrese la fecha actual en números: ");
-        String fecha = scanner.nextLine();
-        scanner.nextLine();
-
-        puestos[puesto] = tamanio + " | Fecha: " + fecha;
-        System.out.println("✅ Paquete registrado en el puesto " + puesto);
+        casilleros[pos] = new Paquete(tipo, fecha);
+        System.out.println("Paquete guardado en el casillero " + pos);
     }
 
-    private void mostrarPuestosDisponibles() {
-        System.out.println("\n--Casilleros disponibles--");
-        for (int i = 0; i < 16; i++) {
-            if (puestos[i] == null) {
-                System.out.println("Puesto " + i + " → Disponible");
+    // Mostrar los casilleros vacíos
+    private void mostrarDisponibles() {
+        System.out.println("\n--- Casilleros disponibles ---");
+        boolean hay = false;
+        for (int i = 0; i < casilleros.length; i++) {
+            if (casilleros[i] == null) {
+                System.out.println("Casillero " + i + " → Libre");
+                hay = true;
             }
         }
+        if (!hay) {
+            System.out.println("No hay casilleros disponibles. ");
+        }
     }
 
-    private void informacionCasillero() {
-        System.out.print("Ingrese el número del casillero (0 - 15): ");
-        int puesto = scanner.nextInt();
-        scanner.nextLine();
+    private void infoCasillero() {
+        System.out.print("Ingrese número del casillero (0-15): ");
+        int pos = sc.nextInt();
+        sc.nextLine();
 
-        if (puesto < 0 || puesto >= 16) {
-            System.out.println("Puesto inválido.");
+        if (pos < 0 || pos >= 16) {
+            System.out.println("Este casillero no existe. ");
             return;
         }
 
-        if (puestos[puesto] == null) {
-            System.out.println("Casillero vacío.");
+        if (casilleros[pos] == null) {
+            System.out.println("El casillero está vacío.");
         } else {
-            System.out.println("Casillero " + puesto +
-                               "  Paquete: " + puestos[puesto] +
-                               ", Fecha: " + tiempos[puesto]);
+            System.out.println("Casillero " + pos + " → " + casilleros[pos]);
         }
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Casilleros casillero = new Casilleros();
-        casillero.menu();
+        Casilleros app = new Casilleros();
+        app.menu();
     }
 }
