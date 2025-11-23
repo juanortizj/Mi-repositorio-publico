@@ -13,6 +13,7 @@ public class Menu {
         int intento;
         double saldo = 15000000;
         int opcion = 0;
+        boolean continuar = true;
 
         //Este el el login al banco
         do {
@@ -223,8 +224,17 @@ public class Menu {
                 default:
                     System.out.println("Opción inválida.");
             }
+            System.out.println("Desea seguir en el banco?");
+            String respuesta = scanner.nextLine().toLowerCase();
 
-        } while (opcion != 10);
+            if(respuesta.equals("no")){
+                continuar = false;
+
+            }
+
+
+        }while (continuar);
+
 
         System.out.println("Espero que vuelva pronto.");
     }
