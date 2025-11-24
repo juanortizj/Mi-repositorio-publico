@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 public class Menu {
 
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
         DecimalFormat df = new DecimalFormat("#,###");
         ArrayList<Cuenta_2> listaCuentas = new ArrayList<>();
@@ -15,7 +16,7 @@ public class Menu {
         int opcion = 0;
         boolean continuar = true;
 
-        //Este el el login al banco
+        // --- LOGIN ---
         do {
             System.out.println("Ingrese la contraseña:");
             String input = scanner.nextLine();
@@ -34,9 +35,10 @@ public class Menu {
 
         } while (intento != contrasena);
 
-        // Este es el menú principal del banco
+        // --- MENÚ PRINCIPAL ---
         do {
-            System.out.println("Bienvenido al menú principal de Visa.");
+
+            System.out.println("\n--- Bienvenido al menú principal de Visa ---");
             System.out.println("1. Consultar saldo");
             System.out.println("2. Consignar dinero");
             System.out.println("3. Retirar saldo");
@@ -55,30 +57,33 @@ public class Menu {
                 opcion = -1;
             }
 
-            //Aca comienza el comando se switch para el menú
             switch (opcion) {
 
+                // --- CONSULTAR SALDO ---
                 case 1:
                     System.out.println("Su saldo es: " + df.format(saldo));
                     break;
 
+                // --- CONSIGNAR DINERO ---
                 case 2:
                     System.out.print("Escriba el monto que desea consignar: ");
-
                     try {
                         double monto = Double.parseDouble(scanner.nextLine());
                         if (monto <= 0) {
                             System.out.println("El valor debe ser mayor a 0.");
                         } else {
                             saldo += monto;
-                            System.out.println("Se consignó " + df.format(monto) +
-                                    ". Nuevo saldo: " + df.format(saldo));
+                            System.out.println(
+                                    "Se consignó " + df.format(monto) +
+                                            ". Nuevo saldo: " + df.format(saldo)
+                            );
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Error: ingrese un número válido.");
                     }
                     break;
 
+                // --- RETIRAR DINERO ---
                 case 3:
                     System.out.println("Dime el monto que deseas retirar (0 para cancelar):");
                     try {
@@ -100,10 +105,12 @@ public class Menu {
                     }
                     break;
 
+                // --- CREAR CUENTA ---
                 case 4:
                     System.out.println("Creando una nueva cuenta…");
                     System.out.print("Digite su nombre: ");
                     String nombre = scanner.nextLine();
+
                     System.out.print("Digite su apellido: ");
                     String apellido = scanner.nextLine();
 
@@ -122,6 +129,7 @@ public class Menu {
                     System.out.println("La cuenta ha sido creada con éxito.");
                     break;
 
+                // --- ELIMINAR CUENTA ---
                 case 5:
                     if (listaCuentas.isEmpty()) {
                         System.out.println("No hay cuentas para eliminar.");
@@ -130,9 +138,11 @@ public class Menu {
 
                     System.out.println("Seleccione la cuenta a eliminar:");
                     for (int i = 0; i < listaCuentas.size(); i++) {
-                        System.out.println((i + 1) + ". " +
-                                listaCuentas.get(i).getNombre() + " " +
-                                listaCuentas.get(i).getApellido());
+                        System.out.println(
+                                (i + 1) + ". " +
+                                        listaCuentas.get(i).getNombre() + " " +
+                                        listaCuentas.get(i).getApellido()
+                        );
                     }
 
                     try {
@@ -148,6 +158,7 @@ public class Menu {
                     }
                     break;
 
+                // --- VER CUENTAS ---
                 case 6:
                     System.out.println("Cuentas registradas:");
                     if (listaCuentas.isEmpty()) {
@@ -155,16 +166,21 @@ public class Menu {
                     } else {
                         for (int i = 0; i < listaCuentas.size(); i++) {
                             Cuenta_2 c = listaCuentas.get(i);
-                            System.out.println((i + 1) + ". " + c.getNombre() + " " +
-                                    c.getApellido() + " | Saldo: $" + df.format(c.getSaldo()));
+                            System.out.println(
+                                    (i + 1) + ". " + c.getNombre() + " " +
+                                            c.getApellido() + " | Saldo: $" +
+                                            df.format(c.getSaldo())
+                            );
                         }
                     }
                     break;
 
+                // --- DATOS PERSONALES ---
                 case 7:
                     System.out.println("Ingrese sus datos personales:");
                     System.out.print("Nombre: ");
                     String nombre1 = scanner.nextLine();
+
                     System.out.print("Apellido: ");
                     String apellido1 = scanner.nextLine();
 
@@ -174,67 +190,79 @@ public class Menu {
                     System.out.print("Dirección: ");
                     String direccion = scanner.nextLine();
 
-                    System.out.println("Información personal registrada:");
-                    System.out.println("Nombre: " + nombre1 +
-                            ", Apellido: " + apellido1 +
-                            ", Cédula: " + cedula +
-                            ", Dirección: " + direccion);
+                    System.out.println("\nInformación personal registrada:");
+                    System.out.println(
+                            "Nombre: " + nombre1 +
+                                    ", Apellido: " + apellido1 +
+                                    ", Cédula: " + cedula +
+                                    ", Dirección: " + direccion
+                    );
                     break;
 
+                // --- TRANSACCIONES ---
                 case 8:
-                    System.out.println("Que monto desea consignar? ");
-                    try{
+                    System.out.println("¿Qué monto desea consignar?");
+                    try {
                         double montoTransaccion = Integer.parseInt(scanner.nextLine());
-                        System.out.println("Ahora escriba a que banco se realiza la transferencia: ");
+
+                        System.out.println("Ahora escriba a qué banco se realiza la transferencia: ");
                         String banco = scanner.nextLine();
+
                         if (montoTransaccion <= saldo) {
                             System.out.println("El valor debe ser mayor a 0.");
                         } else if (montoTransaccion > saldo) {
                             System.out.println("Saldo insuficiente para realizar esta transferencia.");
                         } else {
                             saldo -= montoTransaccion;
-                            String registro = "Transferencia: " + df.format(montoTransaccion) + " -> Banco: " + banco;
+                            String registro =
+                                    "Transferencia: " + df.format(montoTransaccion) +
+                                            " -> Banco: " + banco;
+
                             historialTransferencias.push(registro);
-                            System.out.println("El monto que se consignó fué: " + df.format(montoTransaccion) +
-                                    " al banco " + banco + " y el nuevo saldo es de: " + df.format(saldo));
+
+                            System.out.println(
+                                    "El monto consignado fue: " + df.format(montoTransaccion) +
+                                            " al banco " + banco +
+                                            ". Nuevo saldo: " + df.format(saldo)
+                            );
                         }
+
                     } catch (NumberFormatException e) {
-                        System.out.println("Por favor ingrese un numero valido");
+                        System.out.println("Por favor ingrese un número válido");
                     }
                     break;
 
-
+                // --- HISTORIAL ---
                 case 9:
-                    System.out.println("El historial de transferencias es: ");
-
+                    System.out.println("El historial de transferencias es:");
                     if (historialTransferencias.isEmpty()) {
                         System.out.println("No hay transferencias registradas.");
                     } else {
-
                         for (String movimiento : historialTransferencias) {
                             System.out.println(movimiento);
                         }
                     }
                     break;
 
+                // --- SALIR ---
                 case 10:
-                    System.out.println("Espero que vuelvas pronto. ");
-                    System.out.println("Que tengas buen dia. ");
+                    System.out.println("Espero que vuelvas pronto.");
+                    System.out.println("Que tengas buen día.");
+                    break;
 
+                // --- OPCIÓN INVÁLIDA ---
                 default:
                     System.out.println("Opción inválida.");
             }
-            System.out.println("Desea seguir en el banco?");
+
+            System.out.println("\n¿Desea seguir en el banco?");
             String respuesta = scanner.nextLine().toLowerCase();
 
-            if(respuesta.equals("no")){
+            if (respuesta.equals("no")) {
                 continuar = false;
-
             }
 
-
-        }while (continuar);
-
+        } while (continuar);
 
         System.out.println("Espero que vuelva pronto.");
     }
